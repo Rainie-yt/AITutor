@@ -1,0 +1,331 @@
+[
+  {
+    "source": "人工智能导论",
+    "target": "机器学习",
+    "relation": "包含"
+  },
+  {
+    "source": "人工智能导论",
+    "target": "深度学习",
+    "relation": "包含"
+  },
+  {
+    "source": "机器学习",
+    "target": "监督学习",
+    "relation": "包含"
+  },
+  {
+    "source": "机器学习",
+    "target": "无监督学习",
+    "relation": "包含"
+  },
+  {
+    "source": "机器学习",
+    "target": "优化算法",
+    "relation": "依赖"
+  },
+
+  {
+    "source": "K-means",
+    "target": "无监督学习",
+    "relation": "属于"
+  },
+  {
+    "source": "K-means",
+    "target": "聚类",
+    "relation": "用于"
+  },
+  {
+    "source": "K-means",
+    "target": "欧氏距离",
+    "relation": "使用"
+  },
+  {
+    "source": "K-means",
+    "target": "聚类中心",
+    "relation": "包含"
+  },
+  {
+    "source": "K-means",
+    "target": "迭代优化",
+    "relation": "依赖"
+  },
+  {
+    "source": "K-means",
+    "target": "距离度量",
+    "relation": "依赖"
+  },
+
+  {
+    "source": "KNN",
+    "target": "监督学习",
+    "relation": "属于"
+  },
+  {
+    "source": "KNN",
+    "target": "分类",
+    "relation": "用于"
+  },
+  {
+    "source": "KNN",
+    "target": "回归任务",
+    "relation": "可用于"
+  },
+  {
+    "source": "KNN",
+    "target": "距离度量",
+    "relation": "依赖"
+  },
+  {
+    "source": "KNN",
+    "target": "欧氏距离",
+    "relation": "常用"
+  },
+  {
+    "source": "KNN",
+    "target": "多数投票",
+    "relation": "使用"
+  },
+
+  {
+    "source": "K-means",
+    "target": "KNN",
+    "relation": "易混淆"
+  },
+  {
+    "source": "K-means",
+    "target": "KNN",
+    "relation": "都依赖距离度量"
+  },
+  {
+    "source": "K-means",
+    "target": "KNN",
+    "relation": "学习方式不同"
+  },
+  {
+    "source": "K-means",
+    "target": "无监督学习",
+    "relation": "体现"
+  },
+  {
+    "source": "KNN",
+    "target": "监督学习",
+    "relation": "体现"
+  },
+
+  {
+    "source": "梯度下降",
+    "target": "优化算法",
+    "relation": "属于"
+  },
+  {
+    "source": "梯度下降",
+    "target": "损失函数",
+    "relation": "优化"
+  },
+  {
+    "source": "梯度下降",
+    "target": "学习率",
+    "relation": "受影响于"
+  },
+  {
+    "source": "梯度下降",
+    "target": "参数更新",
+    "relation": "实现"
+  },
+  {
+    "source": "梯度下降",
+    "target": "迭代优化",
+    "relation": "属于"
+  },
+
+  {
+    "source": "线性回归",
+    "target": "监督学习",
+    "relation": "属于"
+  },
+  {
+    "source": "线性回归",
+    "target": "回归任务",
+    "relation": "用于"
+  },
+  {
+    "source": "线性回归",
+    "target": "连续值预测",
+    "relation": "用于"
+  },
+  {
+    "source": "线性回归",
+    "target": "均方误差",
+    "relation": "使用"
+  },
+  {
+    "source": "线性回归",
+    "target": "损失函数",
+    "relation": "依赖"
+  },
+  {
+    "source": "线性回归",
+    "target": "梯度下降",
+    "relation": "可使用"
+  },
+  {
+    "source": "线性回归",
+    "target": "参数更新",
+    "relation": "需要"
+  },
+
+  {
+    "source": "深度学习",
+    "target": "神经网络",
+    "relation": "基于"
+  },
+  {
+    "source": "CNN",
+    "target": "深度学习",
+    "relation": "属于"
+  },
+  {
+    "source": "CNN",
+    "target": "神经网络",
+    "relation": "属于"
+  },
+  {
+    "source": "CNN",
+    "target": "卷积层",
+    "relation": "包含"
+  },
+  {
+    "source": "CNN",
+    "target": "池化层",
+    "relation": "包含"
+  },
+  {
+    "source": "CNN",
+    "target": "全连接层",
+    "relation": "包含"
+  },
+  {
+    "source": "CNN",
+    "target": "图像分类",
+    "relation": "用于"
+  },
+  {
+    "source": "CNN",
+    "target": "特征提取",
+    "relation": "实现"
+  },
+  {
+    "source": "CNN",
+    "target": "梯度下降",
+    "relation": "训练可依赖"
+  },
+  {
+    "source": "CNN",
+    "target": "损失函数",
+    "relation": "训练需要"
+  },
+
+  {
+    "source": "Transformer",
+    "target": "深度学习",
+    "relation": "属于"
+  },
+  {
+    "source": "Transformer",
+    "target": "神经网络",
+    "relation": "属于"
+  },
+  {
+    "source": "Transformer",
+    "target": "注意力机制",
+    "relation": "基于"
+  },
+  {
+    "source": "Transformer",
+    "target": "自注意力机制",
+    "relation": "包含"
+  },
+  {
+    "source": "Transformer",
+    "target": "多头注意力",
+    "relation": "包含"
+  },
+  {
+    "source": "Transformer",
+    "target": "位置编码",
+    "relation": "使用"
+  },
+  {
+    "source": "Transformer",
+    "target": "大语言模型",
+    "relation": "支撑"
+  },
+  {
+    "source": "Transformer",
+    "target": "文本生成",
+    "relation": "用于"
+  },
+  {
+    "source": "Transformer",
+    "target": "梯度下降",
+    "relation": "训练可依赖"
+  },
+  {
+    "source": "Transformer",
+    "target": "损失函数",
+    "relation": "训练需要"
+  },
+
+  {
+    "source": "CNN",
+    "target": "Transformer",
+    "relation": "可对比"
+  },
+  {
+    "source": "CNN",
+    "target": "局部特征",
+    "relation": "侧重"
+  },
+  {
+    "source": "Transformer",
+    "target": "全局关系",
+    "relation": "侧重"
+  },
+  {
+    "source": "CNN",
+    "target": "图像分类",
+    "relation": "常用于"
+  },
+  {
+    "source": "Transformer",
+    "target": "文本生成",
+    "relation": "常用于"
+  },
+
+  {
+    "source": "梯度下降",
+    "target": "CNN",
+    "relation": "可用于训练"
+  },
+  {
+    "source": "梯度下降",
+    "target": "Transformer",
+    "relation": "可用于训练"
+  },
+  {
+    "source": "损失函数",
+    "target": "线性回归",
+    "relation": "用于评价"
+  },
+  {
+    "source": "损失函数",
+    "target": "CNN",
+    "relation": "用于训练"
+  },
+  {
+    "source": "损失函数",
+    "target": "Transformer",
+    "relation": "用于训练"
+  }
+]
