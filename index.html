@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>AI导学 - 多智能体系统</title>
+<script src="https://unpkg.com/vue@2.6.14/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@0.27.2/dist/axios.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{height:100vh;display:grid;grid-template-columns:220px 1fr 320px;font-family:"Microsoft Yahei",sans-serif}
+.left-panel{border-right:1px solid #eee;padding:12px;display:flex;flex-direction:column}
+#graph-box{flex:1;width:100%}
+.tip-text{font-size:12px;color:#999;margin-top:8px}
+.center-panel{padding:16px;display:flex;flex-direction:column}
+.agent-tab{display:flex;gap:8px;margin-bottom:12px}
+.agent-tab button{padding:6px 14px;border:1px solid #409eff;background:#fff;color:#409eff;border-radius:4px;cursor:pointer}
+.agent-tab button.active{background:#409eff;color:#fff}
+.chat-box{flex:1;border:1px solid #eee;padding:10px;overflow-y:auto;margin-bottom:12px}
+.msg-item{margin:8px 0}
+.user-msg{text-align:right}
+.user-msg span{display:inline-block;background:#409eff;color:#fff;padding:6px 10px;border-radius:8px;max-width:80%}
+.ai-msg span{display:inline-block;background:#f5f7fa;padding:6px 10px;border-radius:8px;max-width:80%}
+.send-area{display:flex;gap:8px}
+.send-area textarea{flex:1;padding:8px;resize:none;border:1px solid #ddd;border-radius:4px}
+.send-area button{padding:0 16px;background:#409eff;color:#fff;border:none;border-radius:4px;cursor:pointer}
+.right-panel{border-left:1px solid #eee;padding:16px}
+.quiz-box{border:1px solid #eee;padding:12px;min-height:200px;margin-bottom:12px}
+.start-quiz{width:100%;padding:8px;background:#67c23a;color:#fff;border:none;border-radius:4px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="app">
+<div class="left-panel">
+<h3>课程知识图谱</h3>
+<div id="graph-box"></div>
+<div class="tip-text">点击节点快速定位知识点</div>
+</div>
+<div class="center-panel">
+<div class="agent-tab">
+<button :class="{active:agentType==='math'}" @click="agentType='math'">数学推导Agent</button>
+<button :class="{active:agentType==='code'}" @click="agentType='code'">算法实现Agent</button>
+<button :class="{active:agentType==='concept'}" @click="agentType='concept'">概念辨析Agent</button>
+</div>
+<div class="chat-box" ref="chatScroll">
+<div v-for="(item,idx) in msgList" :key="idx" class="msg-item" :class="item.role==='user'?'user-msg':'ai-msg'">
+<span>{{item.content}}</span>
+</div>
+</div>
+<div class="send-area">
+<textarea v-model="inputText" placeholder="输入你的问题..."></textarea>
+<button @click="sendMsg">发送</button>
+</div>
+</div>
+<div class="right-panel">
+<h3>知识点测验</h3>
+<div class="quiz-box">
+<div v-if="quizContent">{{quizContent}}</div>
+<div v-else style="color:#999;">点击下方按钮获取题目</div>
+</div>
+<button class="start-quiz" @click="getQuiz">开始刷题</button>
+</div>
+</div>
+<script>
+new Vue({
+el:'#app',
+data(){
+return{
+agentType:'concept',
+inputText:'',
+msgList:[],
+quizContent:'',
+chart:null
+}
+},
+mounted(){
+this.initGraph();
+this.loadKnowledgeData();
+},
+methods:{
+initGraph(){
+this.chart=echarts.init(document.getElementById('graph-box'));
+window.addEventListener('resize',()=>this.chart.resize());
+},
+// 加载左侧知识图谱接口（运行正常）
+loadKnowledgeData(){
+axios.get('http://localhost:5000/api/knowledge')
+.then(res=>{
+const data=res.data.knowledge;
+const nodes=data.map(item=>({id:item.id,name:item.name,symbolSize:60}));
+const option={series:[{type:'graph',layout:'force',data:nodes,links:[],roam:true,label:{show:true}}]};
+this.chart.setOption(option);
+})
+.catch(err=>console.error("图谱加载失败",err));
+},
+// 聊天提问接口（完全运行正常，问答收发、排版顺序全部正确）
+sendMsg(){
+if(!this.inputText.trim())return;
+const q=this.inputText.trim();
+this.msgList.push({role:'user',content:q});
+this.$nextTick(()=>this.$refs.chatScroll.scrollTop=this.$refs.chatScroll.scrollHeight);
+axios.post('http://localhost:5000/api/chat',
+{question:q,agent_type:this.agentType},
+{headers:{'Content-Type':'application/json'}}
+)
+.then(res=>{
+let ans = res.data.answer || res.data.reply || JSON.stringify(res.data);
+this.msgList.push({role:'ai',content:ans});
+this.$nextTick(()=>this.$refs.chatScroll.scrollTop=this.$refs.chatScroll.scrollHeight);
+})
+.catch(()=>this.msgList.push({role:'ai',content:'请求异常，后端未响应'}));
+this.inputText='';
+},
+// 刷题请求：前端请求格式完全正确，发送POST+标准JSON请求头
+getQuiz(){
+axios.post('http://localhost:5000/api/quiz/get', null, {
+headers: {
+'Content-Type': 'application/json'
+}
+})
+.then(res=>{
+console.log('后端返回原始数据：', res.data);
+this.quizContent = res.data.question;
+})
+.catch(err=>{
+console.error('题目接口错误', err)
+this.quizContent = '题目获取失败';
+});
+}
+}
+})
+</script>
+</body>
+</html>
