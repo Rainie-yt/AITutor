@@ -304,11 +304,17 @@ def get_knowledge_graph():
 # 七、测验相关接口
 # ==========================================
 
-@app.route('/api/quiz/get', methods=['POST'])
+@app.route('/api/quiz/get', methods=["GET", "POST"])
 def get_quiz():
     try:
         global current_quiz
-        data = request.get_json() or {}
+        
+        # 支持GET和POST两种方式
+        if request.method == 'POST':
+            data = request.get_json() or {}
+        else:
+            data = request.args
+        
         concept = data.get('concept', '')
         difficulty = data.get('difficulty', '')
         
@@ -323,23 +329,21 @@ def get_quiz():
             candidates = [q for q in candidates if q.get('difficulty', '') == difficulty]
         
         if not candidates:
-            return jsonify({"code": 404, "msg": "没有符合条件的题目"}), 404
+            return jsonify({"question": "暂无符合条件的题目", "options": []}), 404
         
         selected = random.choice(candidates)
         current_quiz = selected
         
+        # 返回前端期望的格式
         return jsonify({
-            "code": 200,
-            "data": {
-                "id": selected.get("id"),
-                "concept": selected.get("concept"),
-                "question": selected.get("question"),
-                "options": selected.get("options", [])
-            }
+            "question": selected.get("question", ""),
+            "options": selected.get("options", []),
+            "id": selected.get("id"),
+            "concept": selected.get("concept")
         })
     except Exception as e:
         print(f"抽题接口出错：{e}")
-        return jsonify({"code": 500, "msg": str(e)}), 500
+        return jsonify({"question": "服务器出错", "options": []}), 500
 
 @app.route('/api/quiz/submit', methods=['POST'])
 def submit_quiz():
