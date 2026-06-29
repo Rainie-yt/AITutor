@@ -286,15 +286,42 @@ def clear_history():
     # 知识图谱接口
 @app.route('/api/knowledge_graph', methods=['GET'])
 def get_knowledge_graph():
-    """获取知识图谱数据"""
+    """获取知识图谱数据（自动提取节点并拼接知识库内容）"""
     try:
         with open('knowledge_base/knowledge_graph.json', 'r', encoding='utf-8') as f:
-            graph_data = json.load(f)
+            edges = json.load(f)
+        
+        # 1. 从所有边中提取所有节点（去重）
+        node_names = set()
+        for edge in edges:
+            node_names.add(edge.get('source', ''))
+            node_names.add(edge.get('target', ''))
+        
+        # 2. 构造节点列表，拼接知识库内容
+        nodes = []
+        for name in node_names:
+            node = {
+                'id': name,
+                'name': name
+            }
+            # 去知识库里找有没有这个知识点（模糊匹配）
+            for key, item in knowledge_base.items():
+                if key.lower() in name.lower() or name.lower() in key.lower():
+                    node['content'] = item.get('content', '')
+                    node['keywords'] = item.get('keywords', [])
+                    break
+            nodes.append(node)
+        
+        # 3. 返回标准的 nodes + edges 格式
         return jsonify({
             "code": 200,
-            "data": graph_data
+            "data": {
+                "nodes": nodes,
+                "edges": edges
+            }
         })
     except Exception as e:
+        print(f"加载知识图谱失败：{e}")
         return jsonify({
             "code": 500,
             "msg": f"加载知识图谱失败：{str(e)}"
@@ -339,7 +366,8 @@ def get_quiz():
             "question": selected.get("question", ""),
             "options": selected.get("options", []),
             "id": selected.get("id"),
-            "concept": selected.get("concept")
+            "concept": selected.get("concept"),
+            "type":selected.get("type", "choice")
         })
     except Exception as e:
         print(f"抽题接口出错：{e}")
