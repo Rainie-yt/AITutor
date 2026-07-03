@@ -404,17 +404,46 @@ def submit_quiz():
     current_quiz = None
     return jsonify(result)
 
-@app.route('/api/quiz/error', methods=['GET'])
-def get_error_book():
-    """
-    获取错题本
-    返回：所有做错的题目
-    """
-    return jsonify({
-        "code": 200,
-        "count": len(error_book),
-        "data": error_book
-    })
+@app.route('/api/quiz/clear', methods=['POST'])
+def clear_error_book():
+    """清空错题本"""
+    try:
+        global error_book
+        error_book = []
+        return jsonify({
+            "code": 200,
+            "message": "错题本已清空"
+        })
+    except Exception as e:
+        print(f"清空错题本失败：{e}")
+        return jsonify({
+            "code": 500,
+            "msg": str(e)
+        }), 500
+
+
+@app.route('/api/quiz/remove', methods=['POST'])
+def remove_error():
+    """从错题本移除某道题"""
+    try:
+        global error_book
+        data = request.get_json()
+        question_id = data.get('id', '')
+        
+        # 按id移除对应的题目
+        error_book = [q for q in error_book if str(q.get('id')) != str(question_id)]
+        
+        return jsonify({
+            "code": 200,
+            "message": "已从错题本移除",
+            "count": len(error_book)
+        })
+    except Exception as e:
+        print(f"移除错题失败：{e}")
+        return jsonify({
+            "code": 500,
+            "msg": str(e)
+        }), 500
 
 # ==========================================
 # 启动服务
