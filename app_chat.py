@@ -404,6 +404,15 @@ def submit_quiz():
     current_quiz = None
     return jsonify(result)
 
+@app.route('/api/quiz/error', methods=['GET'])
+def get_error_book():
+    """获取错题本"""
+    return jsonify({
+        "code": 200,
+        "count": len(error_book),
+        "data": error_book
+    })
+
 @app.route('/api/quiz/clear', methods=['POST'])
 def clear_error_book():
     """清空错题本"""
