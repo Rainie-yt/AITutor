@@ -9,7 +9,6 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body {height:100%;background:#fff5f9;overflow:hidden;cursor:default;}
-/* 整体三栏不等宽布局：左33% 中37% 右30% 修复网格撑开问题 */
 .wrap {
   height:100vh;
   max-width:1750px;
@@ -29,13 +28,20 @@ html,body {height:100%;background:#fff5f9;overflow:hidden;cursor:default;}
   overflow:hidden;
 }
 
-/* 流光动画定义 */
 @keyframes flowBorder {
   0% {background-position: 0% 50%;}
   100% {background-position: 200% 50%;}
 }
 
-/* ========== 左栏：知识图谱【完全原样，不加流光】 ========== */
+.left-flow-outer{
+  width:100%;
+  height:100%;
+  padding:3px;
+  border-radius:18px;
+  background: linear-gradient(90deg,#f8c8dc,#e078a6,#f8c8dc,#e078a6);
+  background-size:200% 100%;
+  animation: flowBorder 3s linear infinite;
+}
 .graph-wrap{
   width:100%;
   height:100%;
@@ -53,7 +59,7 @@ html,body {height:100%;background:#fff5f9;overflow:hidden;cursor:default;}
 .graph-wrap:hover{
   transform: scale(1.015);
   border-color:#e09abc;
-  box-shadow: 0 6px 18px rgba(232, 154, 188, 0.25);
+  box-shadow: 6px 6px 18px rgba(232, 154, 188, 0.25);
 }
 .graph-wrap .deco{
   position:absolute;
@@ -78,7 +84,7 @@ html,body {height:100%;background:#fff5f9;overflow:hidden;cursor:default;}
   min-height:0;
   position:relative;
 }
-#graph-box.empty-tip{
+#graph-box .empty-tip{
   position:absolute;
   top:50%;
   left:50%;
@@ -91,7 +97,6 @@ html,body {height:100%;background:#fff5f9;overflow:hidden;cursor:default;}
   margin-top:6px
 }
 
-/* ========== 中间栏外层流光容器（强制有效结构） ========== */
 .flow-outer{
   width:100%;
   height:100%;
@@ -117,7 +122,7 @@ html,body {height:100%;background:#fff5f9;overflow:hidden;cursor:default;}
 }
 .chat-wrap:hover{
   transform: scale(1.015);
-  box-shadow: 0 6px 18px rgba(232, 154, 188, 0.25);
+  box-shadow: 6px 6px 18px rgba(232, 154, 188, 0.25);
 }
 .chat-wrap .deco{
   position:absolute;
@@ -128,27 +133,11 @@ html,body {height:100%;background:#fff5f9;overflow:hidden;cursor:default;}
   pointer-events:none;
   z-index:2;
 }
-.agent-tab{
-  display:flex;
-  gap:8px;
-  margin-bottom:12px
-}
-.agent-tab button{
-  padding:6px 14px;
-  border:2px solid #f4b8d0;
-  background:#fff;
-  color:#d15b8c;
-  border-radius:20px;
-  cursor:pointer;
-  transition:0.2s;
-}
-.agent-tab button.active{
-  background:#f4b8d0;
-  color:#fff;
-  border-color:#e89abc;
-}
-.agent-tab button:hover{
-  background:#ffe6ef;
+.chat-title{
+  color:#d86b9e;
+  font-size:17px;
+  margin-bottom:12px;
+  padding-left:4px;
 }
 .chat-box{
   flex:1;
@@ -228,7 +217,6 @@ html,body {height:100%;background:#fff5f9;overflow:hidden;cursor:default;}
   background:#e88fb9;
 }
 
-/* ========== 右侧栏外层流光容器 ========== */
 .quiz-outer{
   width:100%;
   height:100%;
@@ -254,7 +242,7 @@ html,body {height:100%;background:#fff5f9;overflow:hidden;cursor:default;}
 }
 .quiz-wrap:hover{
   transform: scale(1.015);
-  box-shadow: 0 6px 18px rgba(232, 154, 188, 0.25);
+  box-shadow: 6px 6px 18px rgba(232, 154, 188, 0.25);
 }
 .quiz-wrap .deco{
   position:absolute;
@@ -335,8 +323,22 @@ html,body {height:100%;background:#fff5f9;overflow:hidden;cursor:default;}
 .start-quiz:hover{
   background:#e88fb9;
 }
+.error-book-btn{
+  width:100%;
+  padding:9px;
+  background:#fff;
+  color:#d15b8c;
+  border:2px solid #f4b8d0;
+  border-radius:22px;
+  cursor:pointer;
+  font-size:15px;
+  transition:0.2s;
+  flex-shrink:0;
+}
+.error-book-btn:hover{
+  background:#ffe6ef;
+}
 
-/* 知识点弹窗 */
 .detail-mask{
   position:fixed;
   inset:0;
@@ -377,32 +379,113 @@ html,body {height:100%;background:#fff5f9;overflow:hidden;cursor:default;}
   color:#663350;
   white-space:pre-line;
 }
+
+.error-mask{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.35);
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.error-box{
+  width:680px;
+  max-height:80vh;
+  background:#fffafc;
+  border:2px solid #f8c8dc;
+  border-radius:18px;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+}
+.error-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+  color:#d15b8c;
+  font-size:18px;
+}
+.error-list-wrap{
+  flex:1;
+  overflow-y:auto;
+  padding-right:6px;
+}
+.error-item{
+  border:1px solid #f4c8dd;
+  border-radius:12px;
+  padding:12px;
+  margin-bottom:10px;
+  background:#fff7fb;
+}
+.error-q-title{
+  color:#773355;
+  margin-bottom:8px;
+}
+.error-btn-group{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+  justify-content:flex-end;
+}
+.error-btn-group button{
+  padding:4px 10px;
+  border-radius:14px;
+  border:none;
+  cursor:pointer;
+  font-size:13px;
+}
+.redo-btn{
+  background:#f4a8c7;
+  color:#fff;
+}
+.del-btn{
+  background:#ffb8b8;
+  color:#fff;
+}
+.empty-error-tip{
+  text-align:center;
+  padding:40px 0;
+  color:#b87898;
+}
+.error-bottom-btn{
+  margin-top:12px;
+  text-align:right;
+}
+.clear-all-error{
+  padding:6px 14px;
+  border-radius:16px;
+  border:1px solid #ff9999;
+  background:#fff;
+  color:#dd5555;
+  cursor:pointer;
+}
+.clear-all-error:hover{
+  background:#ffe9e9;
+}
 </style>
 </head>
 <body>
 <div class="wrap" id="app">
-  <!-- 左栏：图谱 无任何修改、无流光 -->
   <div class="col-panel">
-    <div class="graph-wrap">
-      <span class="deco">🌧️</span>
-      <h3>课程知识图谱</h3>
-      <div id="graph-box">
-        <div class="empty-tip" v-if="!graphData || graphData.nodes.length===0">图谱加载中/暂无数据</div>
+    <div class="left-flow-outer">
+      <div class="graph-wrap">
+        <span class="deco">🌧️</span>
+        <h3>课程知识图谱</h3>
+        <div id="graph-box">
+          <div class="empty-tip" v-if="!graphData || graphData.nodes.length===0">图谱加载中/暂无数据</div>
+        </div>
+        <div class="tip-text">鼠标滚轮缩放 | 拖拽平移画布 | 点击节点快速定位知识点</div>
       </div>
-      <div class="tip-text">鼠标滚轮缩放 | 拖拽平移画布 | 点击节点快速定位知识点</div>
     </div>
   </div>
 
-  <!-- 中间聊天：外层流光容器 -->
   <div class="col-panel">
     <div class="flow-outer">
       <div class="chat-wrap">
         <span class="deco">🔥</span>
-        <div class="agent-tab">
-          <button :class="{active:agentType==='math'}" @click="agentType='math';clearHistory()">数学推导Agent</button>
-          <button :class="{active:agentType==='code'}" @click="agentType='code';clearHistory()">算法实现Agent</button>
-          <button :class="{active:agentType==='concept'}" @click="agentType='concept';clearHistory()">概念辨析Agent</button>
-        </div>
+        <h3 class="chat-title">智能问答助手</h3>
         <div class="chat-box" ref="chatScroll">
           <div v-for="(item,idx) in msgList" :key="idx" class="msg-item" :class="item.role==='user'?'user-msg':'ai-msg'">
             <span>{{ formatText(item.content) }}</span>
@@ -417,7 +500,6 @@ html,body {height:100%;background:#fff5f9;overflow:hidden;cursor:default;}
     </div>
   </div>
 
-  <!-- 右侧刷题：外层流光容器 + 图标改为✨ -->
   <div class="col-panel">
     <div class="quiz-outer">
       <div class="quiz-wrap">
@@ -437,11 +519,11 @@ html,body {height:100%;background:#fff5f9;overflow:hidden;cursor:default;}
           <div v-else style="color:#c988a5;">点击下方按钮获取题目</div>
         </div>
         <button class="start-quiz" @click="getQuiz">开始刷题</button>
+        <button class="error-book-btn" @click="openErrorBook">📖 查看错题本</button>
       </div>
     </div>
   </div>
 
-  <!-- 知识点弹窗 -->
   <div v-if="showDetail" class="detail-mask" @click.self="closeDetail">
     <div class="detail-box">
       <div class="detail-title">
@@ -451,16 +533,46 @@ html,body {height:100%;background:#fff5f9;overflow:hidden;cursor:default;}
       <div class="detail-content">{{ formatText(detailNode.content) }}</div>
     </div>
   </div>
+
+  <div v-if="showErrorBook" class="error-mask" @click.self="closeErrorBook">
+    <div class="error-box">
+      <div class="error-head">
+        <span>📖 我的错题本（共{{errorList.length}}道）</span>
+        <button class="close-btn" @click="closeErrorBook">×</button>
+      </div>
+      <div class="error-list-wrap">
+        <div v-if="errorList.length === 0" class="empty-error-tip">
+          暂无错题，认真做题就会收录错题啦~
+        </div>
+        <div v-for="item in errorList" :key="item.id" class="error-item">
+          <div class="error-q-title">
+            <b>题目：</b>{{ formatText(item.question) }}
+          </div>
+          <div v-for="(opt,i) in item.options" :key="i">
+            {{String.fromCharCode(65+i)}}. {{formatText(opt)}}
+          </div>
+          <div style="margin-top:6px;font-size:13px;color:#c8507f">
+            正确答案：{{item.answer}}
+          </div>
+          <div class="error-btn-group">
+            <button class="redo-btn" @click="redoErrorQuiz(item)">重做本题</button>
+            <button class="del-btn" @click="deleteErrorQuiz(item.id)">移除错题</button>
+          </div>
+        </div>
+      </div>
+      <div class="error-bottom-btn">
+        <button class="clear-all-error" @click="clearAllErrorQuiz">清空全部错题</button>
+      </div>
+    </div>
+  </div>
 </div>
 <script>
 new Vue({
 el:'#app',
 data(){
 return{
-agentType:'concept',
 inputText:'',
 msgList:[],
-// 新增对话上下文数组，存储历史轮次
 chatHistory:[],
 quizContent:'',
 quizOptions:[],
@@ -469,7 +581,11 @@ currentQuizId:'',
 chart:null,
 graphData:null,
 showDetail:false,
-detailNode:{name:'',content:''}
+detailNode:{name:'',content:''},
+showErrorBook: false,
+errorList: [],
+currentErrorQuiz: null,
+isRedoMode: false
 }
 },
 mounted(){
@@ -477,19 +593,16 @@ this.initGraph();
 this.loadKnowledgeData();
 },
 methods:{
-// 切换Agent自动清空上下文，避免不同类型对话串内容
-clearHistory(){
-  this.chatHistory = [];
-},
-// 强化版文本清洗：清除所有*列表标记、加粗符号、标题标记，规整换行
 formatText(raw){
   if(!raw) return '';
   let txt = raw
-    .replace(/\*\*/g, '') // 清除加粗标记
-    .replace(/^(\s*)\*\s*/gm, '$1') // 清除行首列表*
-    .replace(/\s*\*(\s*)/g, '$1') // 清除行内零散*
-    .replace(/^#{1,3}\s*/gm, '') // 清除markdown标题#
-    .replace(/\n\s*\n+/g, '\n\n'); // 合并多余空行
+    .replace(/\*\*/g, '')
+    .replace(/^(\s*)\*\s*/gm, '$1')
+    .replace(/\s*\*(\s*)/g, '$1')
+    .replace(/^#{1,3}\s*/gm, '')
+    .replace(/\n\s*\n+/g, '\n\n');
+  txt = txt.replace(/【([^】]+Agent)】\s+/g, '【$1】');
+  txt = txt.replace(/【([^】]+Agent)】/g, '【$1】 ');
   return txt;
 },
 initGraph(){
@@ -510,7 +623,6 @@ window.addEventListener('resize',()=>{
   this.autoFitGraph();
 });
 },
-// 图谱自动适配缩放，完整容纳所有节点
 autoFitGraph(){
   const chart = this.chart;
   chart.resize();
@@ -593,7 +705,6 @@ axios.get('http://localhost:5000/api/knowledge_graph')
         color:'#f4b8d0',
         width:2
       },
-      // 节点hover放大加深特效，只追加配置，原有布局完全不动
       emphasis:{
         focus:'adjacency',
         scale:1.25,
@@ -609,7 +720,6 @@ axios.get('http://localhost:5000/api/knowledge_graph')
     }]
   };
   vm.chart.setOption(option);
-  // 渲染完成自动适配缩放，整张图完整放入容器
   setTimeout(()=>{
     vm.autoFitGraph();
   }, 350);
@@ -626,26 +736,22 @@ closeDetail(){
 sendMsg(){
 const q=this.inputText.trim();
 if(!q) return;
-// 1、存入聊天展示列表
 this.msgList.push({role:'user',content:q});
-// 2、存入上下文历史数组，给后端携带记忆
 this.chatHistory.push({
   role:"user",
   content:q
 });
 const vm = this;
 this.$nextTick(()=>this.$refs.chatScroll.scrollTop=this.$refs.chatScroll.scrollHeight);
-axios.post('http://localhost:5000/api/chat',
-{
-  question:q,
-  agent_type:this.agentType,
-  history:this.chatHistory
-},{headers:{'Content-Type':'application/json'}})
+
+axios.post('http://localhost:5000/api/chat', {
+  question: q
+}, {
+  headers:{'Content-Type':'application/json'}
+})
 .then(res=>{
 let ans = res.data.answer || res.data.reply || JSON.stringify(res.data);
-// 存入展示列表
 vm.msgList.push({role:'assistant',content:ans});
-// AI回复也存入上下文，形成完整对话链
 vm.chatHistory.push({
   role:"assistant",
   content:ans
@@ -666,6 +772,8 @@ this.quizContent = res.data.question;
 this.quizOptions = res.data.options || [];
 this.currentQuizId = res.data.id || '';
 this.userAnswer = '';
+this.currentErrorQuiz = null;
+this.isRedoMode = false;
 })
 .catch(err=>{
 this.quizContent = '题目获取失败';
@@ -673,11 +781,30 @@ this.quizOptions = [];
 });
 },
 submitAnswer(){
+// 前端统一清洗输入：去空格+大写，杜绝答对误进错题本
 const userSel = this.userAnswer.trim().toUpperCase();
 if(!['A','B','C','D'].includes(userSel)){
   alert("请仅填写A/B/C/D其中一个字母！");
   return;
 }
+
+if(this.isRedoMode && this.currentErrorQuiz){
+  let correctIdx = this.currentErrorQuiz.options.findIndex(opt=>opt === this.currentErrorQuiz.answer);
+  let correctLetter = String.fromCharCode(65 + correctIdx);
+  let isRight = (userSel === correctLetter);
+  if(isRight){
+    alert(`回答正确！\n✅正确答案：${correctLetter}\n解析：${this.formatText(this.currentErrorQuiz.explanation)}`);
+  }else{
+    alert(`回答错误\n❌正确答案：${correctLetter}\n解析：${this.formatText(this.currentErrorQuiz.explanation)}`);
+  }
+  this.userAnswer = '';
+  this.quizContent = '';
+  this.quizOptions = [];
+  this.currentErrorQuiz = null;
+  this.isRedoMode = false;
+  return;
+}
+
 axios.post('http://localhost:5000/api/quiz/submit',{
   user_answer: userSel,
   question_id: this.currentQuizId
@@ -703,6 +830,63 @@ axios.post('http://localhost:5000/api/quiz/submit',{
 .catch(err=>{
   alert("提交失败："+err);
 })
+},
+
+openErrorBook(){
+  const vm = this;
+  axios.get('http://localhost:5000/api/quiz/error')
+  .then(res=>{
+    vm.errorList = res.data.data || [];
+    vm.showErrorBook = true;
+  })
+  .catch(err=>{
+    console.error(err);
+    alert("读取错题失败，请确认后端服务正常运行");
+  })
+},
+closeErrorBook(){
+  this.showErrorBook = false;
+},
+redoErrorQuiz(item){
+  this.currentErrorQuiz = item;
+  this.quizContent = item.question;
+  this.quizOptions = item.options;
+  this.currentQuizId = item.id;
+  this.userAnswer = '';
+  this.isRedoMode = true;
+  this.showErrorBook = false;
+},
+deleteErrorQuiz(qid){
+  if(!confirm("确定要从错题本移除这道题吗？")) return;
+  axios.post('http://localhost:5000/api/quiz/remove', {
+    id: qid
+  }, {
+    headers:{'Content-Type':'application/json'}
+  })
+  .then(res=>{
+    this.openErrorBook();
+    // 修改文案：改为错题本相关
+    alert("✅ 该错题已从错题本移除");
+  })
+  .catch(err=>{
+    alert("移除错题接口异常");
+    console.error(err);
+  })
+},
+clearAllErrorQuiz(){
+  if(!confirm("确定清空所有错题吗？此操作不可恢复！")) return;
+  axios.post('http://localhost:5000/api/quiz/clear', {}, {
+    headers:{'Content-Type':'application/json'}
+  })
+  .then(res=>{
+    this.errorList = [];
+    // 修改文案：改为错题本相关
+    alert("✅ 所有错题已从错题本清空");
+  })
+  .catch(err=>{
+    alert("清空错题接口异常");
+    console.error(err);
+  })
 }
 }
 })
