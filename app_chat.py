@@ -386,8 +386,19 @@ def submit_quiz():
     
     data = request.get_json()
     user_ans = data.get('user_answer', '').strip()
-    correct_ans = current_quiz.get('answer', '')
-    is_right = (user_ans == correct_ans)
+    correct_ans = current_quiz.get('answer', '').strip()
+    options = current_quiz.get('options', [])
+
+    # 如果用户答案是单个字母（A/B/C/D），就找到对应的选项内容
+    if len(user_ans) == 1 and user_ans.upper() in 'ABCDE':
+    # 把字母转成下标（A=0, B=1, C=2...）
+        index = ord(user_ans.upper()) - ord('A')
+        if 0 <= index < len(options):
+            user_ans = options[index]
+
+    # 统一去空格和大小写再比对
+    is_right = (user_ans.strip().upper() == correct_ans.strip().upper())
+
     
     # 答错加入错题本
     if not is_right and current_quiz not in error_book:
